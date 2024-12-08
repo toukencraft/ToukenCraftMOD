@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " + ",
+    "+@+",
+    "/+ "
+  ],
+  "key": {
+    "/": {
+      "item": "minecraft:stick"
+    },
+    "@": {
+      "item": "minecraft:flint"
+    },
+    "+": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "toukencraft:uchiko",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "12 ",
+    "34 ",
+    "   "
+  ],
+  "key": {
+    "1": {
+      "item": "minecraft:charcoal"
+    },
+    "2": {
+      "item": "minecraft:iron_ingot"
+    },
+    "3": {
+      "item": "minecraft:water_bucket"
+    },
+    "4": {
+      "item": "minecraft:flint"
+    }
+  },
+  "result": {
+    "item": "toukencraft:test",
+    "count": 1
+  }
+}
