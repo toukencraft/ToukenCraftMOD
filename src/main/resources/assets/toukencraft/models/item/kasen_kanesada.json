@@ -1,0 +1,6 @@
+{
+  "parent": "toukencraft:item/touken",
+  "textures": {
+    "layer0": "toukencraft:item/kasen_kanesada"
+  }
+}

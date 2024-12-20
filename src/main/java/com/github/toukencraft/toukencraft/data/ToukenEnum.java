@@ -6,7 +6,31 @@ import net.minecraft.resources.ResourceLocation;
 
 /** 刀剣男士の一覧 */
 public enum ToukenEnum {
-    TEST("test", ToukenType.UCHIGATANA, 1.80f);
+    KASHUU_KIYOMITSU(
+            "kashuu_kiyomitsu",
+            ToukenType.UCHIGATANA,
+            1.65f
+    ),
+    KASEN_KANESADA(
+            "kasen_kanesada",
+            ToukenType.UCHIGATANA,
+            1.75f
+    ),
+    MUTSUNOKAMI_YOSHIYUKI(
+            "mutsunokami_yoshiyuki",
+            ToukenType.UCHIGATANA,
+            1.74f
+    ),
+    YAMANBAGIRI_KUNIHIRO(
+            "yamanbagiri_kunihiro",
+            ToukenType.UCHIGATANA,
+            1.72f
+    ),
+    HACHISUKA_KOTETSU(
+            "hachisuka_kotetsu",
+            ToukenType.UCHIGATANA,
+            1.76f
+    );
 
     public final ToukenProperty property;
 

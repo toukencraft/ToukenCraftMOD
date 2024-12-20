@@ -1,0 +1,6 @@
+{
+  "parent": "toukencraft:item/touken",
+  "textures": {
+    "layer0": "toukencraft:item/yamanbagiri_kunihiro"
+  }
+}

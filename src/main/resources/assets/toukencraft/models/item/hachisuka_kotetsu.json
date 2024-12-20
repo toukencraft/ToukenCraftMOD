@@ -1,6 +1,6 @@
 {
   "parent": "toukencraft:item/touken",
   "textures": {
-    "layer0": "toukencraft:item/test"
+    "layer0": "toukencraft:item/hachisuka_kotetsu"
   }
 }

@@ -1,6 +1,18 @@
 {
   "item.toukencraft.uchiko": "Uchiko",
 
-  "item.toukencraft.test": "test touken",
-  "entity.toukencraft.test": "test danshi"
+  "item.toukencraft.kashuu_kiyomitsu": "Kashuu Kiyomitsu",
+  "entity.toukencraft.kashuu_kiyomitsu": "Kashuu Kiyomitsu",
+
+  "item.toukencraft.kasen_kanesada": "Kasen Kanesada",
+  "entity.toukencraft.kasen_kanesada": "Kasen Kanesada",
+
+  "item.toukencraft.mutsunokami_yoshiyuki": "Mutsunokami Yoshiyuki",
+  "entity.toukencraft.mutsunokami_yoshiyuki": "Mutsunokami Yoshiyuki",
+
+  "item.toukencraft.yamanbagiri_kunihiro": "Yamanbagiri Kunihiro",
+  "entity.toukencraft.yamanbagiri_kunihiro": "Yamanbagiri Kunihiro",
+
+  "item.toukencraft.hachisuka_kotetsu": "Hachisuka Kotetsu",
+  "entity.toukencraft.hachisuka_kotetsu": "Hachisuka Kotetsu"
 }

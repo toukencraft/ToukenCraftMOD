@@ -1,6 +1,18 @@
 {
   "item.toukencraft.uchiko": "打粉",
 
-  "item.toukencraft.test": "テスト刀剣",
-  "entity.toukencraft.test": "テスト男士"
+  "item.toukencraft.kashuu_kiyomitsu": "加州清光",
+  "entity.toukencraft.kashuu_kiyomitsu": "加州清光",
+
+  "item.toukencraft.kasen_kanesada": "歌仙兼定",
+  "entity.toukencraft.kasen_kanesada": "歌仙兼定",
+
+  "item.toukencraft.mutsunokami_yoshiyuki": "陸奥守吉行",
+  "entity.toukencraft.mutsunokami_yoshiyuki": "陸奥守吉行",
+
+  "item.toukencraft.yamanbagiri_kunihiro": "山姥切国広",
+  "entity.toukencraft.yamanbagiri_kunihiro": "山姥切国広",
+
+  "item.toukencraft.hachisuka_kotetsu": "蜂須賀虎徹",
+  "entity.toukencraft.hachisuka_kotetsu": "蜂須賀虎徹"
 }
