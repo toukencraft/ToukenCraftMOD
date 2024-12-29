@@ -300,7 +300,10 @@ public class ToukenEntity extends TamableAnimal {
             }
         }
 
-        var nbt = new CompoundTag();
+        var nbt = getToukenItemStack().getTag();
+        if (nbt == null) {
+            nbt = new CompoundTag();
+        }
         nbt.put("Items", nbtTagList);
         nbt.putInt("Size", this.inventory.items.size());
         return nbt;
