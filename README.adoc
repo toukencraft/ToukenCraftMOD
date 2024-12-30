@@ -1,0 +1,28 @@
+= 刀剣クラフト
+:icons: font
+
+image:https://img.shields.io/badge/Minecraft_Version-1.20.1-green[]
+image:https://img.shields.io/badge/Mod_Loader-Fabric-blue[]
+
+刀剣男士とMinecraftの世界を冒険するMODです。 +
+バージョンは1.20.1, Fabricに対応しています。
+
+WARNING: このMODには刀剣男士のテクスチャが含まれていません。リソースパックをご使用ください。
+
+NOTE: 配布可能なテクスチャを募集しています。
+
+== 配布サイト
+
+link:https://modrinth.com/mod/toukencraft[modrinth]
+
+++++
+<iframe
+    width="560" height="315"
+    src="https://www.youtube.com/embed/5VH5zMAySsU?si=r1Y5G_GkbhG48-ev"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+</iframe>
+++++
