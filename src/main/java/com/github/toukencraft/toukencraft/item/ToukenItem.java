@@ -102,17 +102,7 @@ public class ToukenItem extends SwordItem {
 
         // TODO 窒息チェック
 
-        if (level instanceof ClientLevel clientLevel) {
-            // 桜吹雪のパーティクルを再生
-            // FIXME 身長を加味するように
-            ParticleUtil.addParticle(
-                    clientLevel,
-                    ParticleTypes.CHERRY_LEAVES, 20,
-                    upperPos.getX() + 0.5, upperPos.getY() + 0.5, upperPos.getZ() + 0.5,
-                    1.5, 1.5, 1.5,
-                    0, 2, 0
-            );
-        } else if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel) {
             // 刀剣男士を顕現
 
             var entity = (ToukenEntity) entityType.create(
@@ -162,6 +152,16 @@ public class ToukenItem extends SwordItem {
 
             // プレイヤーと紐づけ
             entity.tame(player);
+        } else if (level instanceof ClientLevel clientLevel) {
+            // 桜吹雪のパーティクルを再生
+            // FIXME 身長を加味するように
+            ParticleUtil.addParticle(
+                    clientLevel,
+                    ParticleTypes.CHERRY_LEAVES, 20,
+                    upperPos.getX() + 0.5, upperPos.getY() + 0.5, upperPos.getZ() + 0.5,
+                    1.5, 1.5, 1.5,
+                    0, 2, 0
+            );
         }
     }
 }
