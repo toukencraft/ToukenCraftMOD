@@ -7,13 +7,27 @@ image:https://img.shields.io/badge/Mod_Loader-Fabric-blue[]
 刀剣男士とMinecraftの世界を冒険するMODです。 +
 バージョンは1.20.1, Fabricに対応しています。
 
-WARNING: このMODには刀剣男士のテクスチャが含まれていません。リソースパックをご使用ください。
+[WARNING]
+====
+v1.0.xには刀剣男士のテクスチャが含まれていません。 +
+v1.1.0以降では提供いただいたテクスチャを同梱しています。
+====
 
-NOTE: 配布可能なテクスチャを募集しています。
+[NOTE]
+====
+刀剣男士のテクスチャを変更するために、link:https://github.com/toukencraft/ResourcepackTemplate[リソースパックのテンプレート]を提供しています。 +
+必要に応じてご利用ください。
+====
+
 
 == 配布サイト
 
 link:https://modrinth.com/mod/toukencraft[modrinth]
+
+
+== 紹介動画
+
+link:https://youtu.be/5VH5zMAySsU[YouTube] / link:https://www.nicovideo.jp/watch/sm44481793[ニコニコ動画]
 
 ++++
 <iframe
