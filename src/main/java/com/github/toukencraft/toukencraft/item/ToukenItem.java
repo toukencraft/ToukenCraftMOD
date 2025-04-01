@@ -1,12 +1,12 @@
 package com.github.toukencraft.toukencraft.item;
 
-import com.github.toukencraft.toukencraft.util.ParticleUtil;
 import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
+import com.github.toukencraft.toukencraft.util.ParticleUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -17,8 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,48 +30,43 @@ public class ToukenItem extends SwordItem {
     protected final EntityType<ToukenEntity> entityType;
 
     public ToukenItem(Tier tier, EntityType<ToukenEntity> entityType) {
-        this(tier, 3, -2.4f, new Properties(), entityType);
+        this(tier, new Properties(), entityType);
     }
 
     public ToukenItem(
             Tier tier,
-            int attackDamageModifier,
-            float attackSpeedModifier,
             Properties properties,
             EntityType<ToukenEntity> entityType
     ) {
-        super(tier, attackDamageModifier, attackSpeedModifier, properties);
+        super(tier, properties);
         this.entityType = entityType;
     }
 
     @Override
     public void appendHoverText(
             ItemStack stack,
-            Level level,
+            TooltipContext tooltipContext,
             List<Component> tooltipComponents,
             TooltipFlag isAdvanced
     ) {
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        super.appendHoverText(stack, tooltipContext, tooltipComponents, isAdvanced);
 
-        var tag = stack.getTag();
-        if (tag != null && tag.contains("Items")) {
-            var tagList = tag.getList("Items", Tag.TAG_COMPOUND);
-            final int maxSize = 4;
+        var textCapacity = 4;
+        var contents = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItems();
 
-            for (var i = 0; i < Math.min(maxSize, tagList.size()); i++) {
-                var itemTag = tagList.getCompound(i);
-                var itemStack = ItemStack.of(itemTag);
-                // NOTE https://bugs.mojang.com/browse/MC-248778
-                var component = itemStack.getHoverName().copy().append(" x").append(String.valueOf(itemStack.getCount()));
-                tooltipComponents.add(component);
+        var addedNum = 0;
+        var remainingNum = 0;
+        for (var content : contents) {
+            if (addedNum < textCapacity) {
+                tooltipComponents.add(Component.translatable("container.shulkerBox.itemCount", content.getHoverName(), content.getCount()));
+                addedNum++;
+            } else {
+                remainingNum++;
             }
+        }
 
-            if (tagList.size() > maxSize) {
-                tooltipComponents.add(Component.translatable(
-                        "container.shulkerBox.more",
-                        tagList.size() - maxSize
-                ).withStyle(ChatFormatting.ITALIC));
-            }
+        if (remainingNum > 0) {
+            tooltipComponents.add(Component.translatable("container.shulkerBox.more", remainingNum).withStyle(ChatFormatting.ITALIC));
         }
     }
 
@@ -106,7 +101,7 @@ public class ToukenItem extends SwordItem {
             // 刀剣男士を顕現
 
             var entity = (ToukenEntity) entityType.create(
-                    serverLevel, null, null, pos,
+                    serverLevel, null, pos,
                     MobSpawnType.MOB_SUMMONED, true, true
             );
 
@@ -114,6 +109,8 @@ public class ToukenItem extends SwordItem {
                 ToukenCraft.LOGGER.warn("created entity is null");
                 return;
             }
+
+            // TODO 刀剣と刀剣男士をUUIDで紐づける場合はここで
 
             // プレイヤーの方を向く
             var xRot = 0;
@@ -128,13 +125,11 @@ public class ToukenItem extends SwordItem {
             entity.yBodyRotO = yRot;
 
             // 金床などで名前が付けられていれば反映する
-            if (toukenItemStack.hasCustomHoverName()) {
-                entity.setCustomName(toukenItemStack.getHoverName());
-            }
+            entity.setCustomName(toukenItemStack.get(DataComponents.CUSTOM_NAME));
 
-            // NBTからインベントリのアイテムを復元
-            var tag = toukenItemStack.getTag();
-            entity.deserializeNBT(tag);
+            // インベントリのアイテムを復元
+            var contents = toukenItemStack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
+            contents.copyInto(entity.inventory.items);
 
             // 刀剣を渡す
             player.setItemInHand(hand, ItemStack.EMPTY);

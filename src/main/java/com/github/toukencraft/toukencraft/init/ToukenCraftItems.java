@@ -26,7 +26,7 @@ public class ToukenCraftItems {
         var entityType = ToukenCraftEntities.TOUKEN_DANSHI.get(toukenEnum);
         var item = Registry.register(
                 BuiltInRegistries.ITEM,
-                new ResourceLocation(ToukenCraft.MOD_ID, toukenEnum.property.itemIdentifier()),
+                ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, toukenEnum.property.itemIdentifier()),
                 new ToukenItem(toukenEnum.property.toTier(), entityType)
         );
         TOUKEN.put(toukenEnum, item);
@@ -38,7 +38,7 @@ public class ToukenCraftItems {
     public static void load() {
         UCHIKO = Registry.register(
                 BuiltInRegistries.ITEM,
-                new ResourceLocation(ToukenCraft.MOD_ID,  "uchiko"),
+                ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID,  "uchiko"),
                 new UchikoItem()
         );
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(content -> content.accept(UCHIKO));

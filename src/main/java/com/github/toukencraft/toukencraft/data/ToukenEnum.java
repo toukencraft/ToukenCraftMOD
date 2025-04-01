@@ -42,7 +42,10 @@ public enum ToukenEnum {
         this(new ToukenProperty(
                 identifier,
                 identifier,
-                new ResourceLocation(ToukenCraft.MOD_ID, String.format("textures/entity/%s.png", identifier)),
+                ResourceLocation.fromNamespaceAndPath(
+                        ToukenCraft.MOD_ID,
+                        String.format("textures/entity/%s.png", identifier)
+                ),
                 type,
                 height
         ));

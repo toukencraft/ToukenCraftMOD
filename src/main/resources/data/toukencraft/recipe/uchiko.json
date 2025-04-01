@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     " + ",
     "+@+",
@@ -17,7 +18,7 @@
     }
   },
   "result": {
-    "item": "toukencraft:uchiko",
+    "id": "toukencraft:uchiko",
     "count": 1
   }
 }

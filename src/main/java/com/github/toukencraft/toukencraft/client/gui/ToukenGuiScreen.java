@@ -3,6 +3,8 @@ package com.github.toukencraft.toukencraft.client.gui;
 import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -12,9 +14,10 @@ import net.minecraft.world.entity.player.Inventory;
 
 
 /** 刀剣男士を右クリックしたときに開く画面 */
+@Environment(EnvType.CLIENT)
 public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
     private static final ResourceLocation BACKGROUND_LOCATION =
-            new ResourceLocation(ToukenCraft.MOD_ID, "textures/gui/container/inventory.png");
+            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "textures/gui/container/inventory.png");
 
     private final ToukenEntity entity;
 
@@ -40,12 +43,15 @@ public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
 
             InventoryScreen.renderEntityInInventoryFollowsMouse(
                     guiGraphics,
-                    offsetX + xOffset1 + 2 * slotSize,
-                    offsetY + yOffset1 + (int)(2.4 * slotSize),
-                    17,
-                    offsetX + xOffset1 + 2 * slotSize - mouseX,
-                    offsetY + yOffset1 + (int)(1.4 * slotSize) - mouseY,
-                    this.entity
+                    offsetX + xOffset1 + slotSize,
+                    offsetY + yOffset1,
+                    offsetX + xOffset1 + 3 * slotSize - 2,
+                    offsetY + yOffset1 + 3 * slotSize - 2,
+                    20,
+                    0f,
+                    mouseX,
+                    mouseY,
+                    entity
             );
         }
     }

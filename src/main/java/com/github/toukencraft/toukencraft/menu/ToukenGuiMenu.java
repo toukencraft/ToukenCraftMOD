@@ -22,14 +22,8 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
     public final Player player;
 
     // クライアントサイドで呼び出し
-    public ToukenGuiMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
-        this(containerId, playerInventory, getEntity(playerInventory, extraData));
-    }
-
-    private static ToukenEntity getEntity(Inventory playerInventory, FriendlyByteBuf extraData) {
-        var level = playerInventory.player.level();
-        var entityId = extraData.readVarInt();
-        return (ToukenEntity) level.getEntity(entityId);
+    public ToukenGuiMenu(int containerId, Inventory playerInventory, ToukenGuiData data) {
+        this(containerId, playerInventory, (ToukenEntity) playerInventory.player.level().getEntity(data.entityId()));
     }
 
     // サーバーサイドで呼び出し
@@ -112,7 +106,9 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return toukenContainer.stillValid(player) && toukenEntity.isAlive();
+        return toukenContainer.stillValid(player) &&
+                toukenEntity.isAlive() &&
+                player.canInteractWithEntity(toukenEntity, 4.0);
     }
 
     @Override

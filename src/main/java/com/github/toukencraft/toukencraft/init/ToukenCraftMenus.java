@@ -1,6 +1,7 @@
 package com.github.toukencraft.toukencraft.init;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
+import com.github.toukencraft.toukencraft.menu.ToukenGuiData;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.Registry;
@@ -17,8 +18,8 @@ public class ToukenCraftMenus {
     public static void load() {
         TOUKEN_INVENTORY = Registry.register(
                 BuiltInRegistries.MENU,
-                new ResourceLocation(ToukenCraft.MOD_ID, "touken_inventory_menu"),
-                new ExtendedScreenHandlerType<>(ToukenGuiMenu::new)
+                ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "touken_inventory_menu"),
+                new ExtendedScreenHandlerType<>(ToukenGuiMenu::new, ToukenGuiData.CODEC)
         );
     }
 }

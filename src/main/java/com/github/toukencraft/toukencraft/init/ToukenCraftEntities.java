@@ -24,14 +24,8 @@ public class ToukenCraftEntities {
         var property = toukenEnum.property;
         var entity = Registry.register(
                 BuiltInRegistries.ENTITY_TYPE,
-                new ResourceLocation(ToukenCraft.MOD_ID, property.entityIdentifier()),
-                FabricEntityTypeBuilder
-                        .create(MobCategory.CREATURE, ToukenEntity::new)
-                        .dimensions(new EntityDimensions(property.height()/3, property.height(), true))
-                        .trackRangeBlocks(64)
-                        .forceTrackedVelocityUpdates(true)
-                        .trackedUpdateRate(3)
-                        .build()
+                ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, property.entityIdentifier()),
+                EntityType.Builder.of(ToukenEntity::new, MobCategory.CREATURE).build()
         );
         TOUKEN_DANSHI.put(toukenEnum, entity);
         FabricDefaultAttributeRegistry.register(entity, property.toAttribute());
