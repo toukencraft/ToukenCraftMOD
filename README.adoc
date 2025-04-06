@@ -1,16 +1,18 @@
 = 刀剣クラフト
 :icons: font
 
-image:https://img.shields.io/badge/Minecraft_Version-1.20.1-green[]
-image:https://img.shields.io/badge/Mod_Loader-Fabric-blue[]
+link:https://www.minecraft.net/ja-jp[image:https://img.shields.io/modrinth/game-versions/AhnrHmLv?label=Minecraft+Version&color=green[]]
+link:https://fabricmc.net/[image:https://img.shields.io/badge/Mod_Loader-Fabric-blue[]]
+link:https://modrinth.com/mod/toukencraft[image:https://img.shields.io/modrinth/dt/AhnrHmLv?logo=modrinth[]]
+// link:https://modrinth.com/mod/toukencraft[image:https://img.shields.io/modrinth/v/AhnrHmLv?logo=modrinth&label=mod version[]]
+// link:https://modrinth.com/mod/toukencraft[image:https://img.shields.io/modrinth/followers/AhnrHmLv?logo=modrinth[]]
 
 刀剣男士とMinecraftの世界を冒険するMODです。 +
-バージョンは1.20.1, Fabricに対応しています。
 
 [WARNING]
 ====
 v1.0.xには刀剣男士のテクスチャが含まれていません。 +
-v1.1.0以降では提供いただいたテクスチャを同梱しています。
+v1.1.0以降ではご提供いただいたテクスチャを同梱しています。
 ====
 
 [NOTE]
@@ -19,6 +21,20 @@ v1.1.0以降では提供いただいたテクスチャを同梱しています�
 必要に応じてご利用ください。
 ====
 
+
+== 機能
+
+刀剣のクラフト::
+    作業台に木炭・鉄インゴット・水入りバケツ・火打石を決められた並びに配置することで、対応した刀剣を作成できます。 +
+    レシピの確認のためにlink:https://modrinth.com/mod/jei[JEI]などのMODを併せて導入することをお勧めします。 +
+刀剣男士の顕現::
+    刀剣男士を顕現するには刀剣を手に持ち右クリックします。 +
+    刀剣に戻すには手を空けて刀剣男士を右クリックします。 +
+    しゃがみながら刀剣男士を右クリックすると、刀剣男士のインベントリを開きます。 +
+    (現時点ではアイテムを渡しても特に効果はありません。)
+打粉での手入れ::
+    打粉を持って刀剣男士を右クリックすることで手入れができます。 +
+    打粉も作業台でクラフトできます。 +
 
 == 配布サイト
 
@@ -34,7 +50,6 @@ link:https://youtu.be/5VH5zMAySsU[YouTube] / link:https://www.nicovideo.jp/watch
     width="560" height="315"
     src="https://www.youtube.com/embed/5VH5zMAySsU?si=r1Y5G_GkbhG48-ev"
     title="YouTube video player"
-    frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     referrerpolicy="strict-origin-when-cross-origin"
     allowfullscreen>
