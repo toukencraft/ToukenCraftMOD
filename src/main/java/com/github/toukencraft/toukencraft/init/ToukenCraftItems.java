@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
 
 import java.util.HashMap;
 
@@ -24,10 +25,15 @@ public class ToukenCraftItems {
 
     private static void load_touken(ToukenEnum toukenEnum) {
         var entityType = ToukenCraftEntities.TOUKEN_DANSHI.get(toukenEnum);
+        var tier = toukenEnum.property.toTier();
         var item = Registry.register(
                 BuiltInRegistries.ITEM,
                 ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, toukenEnum.property.itemIdentifier()),
-                new ToukenItem(toukenEnum.property.toTier(), entityType)
+                new ToukenItem(
+                        tier,
+                        new Item.Properties().attributes(SwordItem.createAttributes(tier, 3, -2.4f)),
+                        entityType
+                )
         );
         TOUKEN.put(toukenEnum, item);
 
