@@ -7,18 +7,10 @@
     "1 4"
   ],
   "key": {
-    "1": {
-      "item": "minecraft:charcoal"
-    },
-    "2": {
-      "item": "minecraft:iron_ingot"
-    },
-    "3": {
-      "item": "minecraft:water_bucket"
-    },
-    "4": {
-      "item": "minecraft:flint"
-    }
+    "1": "minecraft:charcoal",
+    "2": "minecraft:iron_ingot",
+    "3": "minecraft:water_bucket",
+    "4": "minecraft:flint"
   },
   "result": {
     "id": "toukencraft:mutsunokami_yoshiyuki",

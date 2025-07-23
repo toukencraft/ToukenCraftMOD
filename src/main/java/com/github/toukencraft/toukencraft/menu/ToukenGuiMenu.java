@@ -2,7 +2,6 @@ package com.github.toukencraft.toukencraft.menu;
 
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;

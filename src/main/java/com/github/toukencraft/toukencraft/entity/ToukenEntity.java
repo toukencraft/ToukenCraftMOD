@@ -2,25 +2,23 @@ package com.github.toukencraft.toukencraft.entity;
 
 import com.github.toukencraft.toukencraft.menu.ToukenGuiData;
 import com.github.toukencraft.toukencraft.util.ParticleUtil;
-import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.*;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -40,6 +38,8 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,7 +49,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     public final SimpleContainer inventory;
 
     @Override
-    public SimpleContainer getInventory() {
+    public @NotNull SimpleContainer getInventory() {
         return inventory;
     }
 
@@ -60,12 +60,12 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         inventory = new SimpleContainer(15);
         inventory.addListener(container -> {
             // インベントリの変化を即座に刀剣のNBTに反映 (インベントリのGUIで齟齬が生じないようにするため)
-            var toukenItemStack =  getToukenItemStack();
+            var toukenItemStack = getToukenItemStack();
             toukenItemStack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(inventory.items));
         });
 
         setNoAi(false);
-        setPersistenceRequired();  // 離れてもデスポーンさせない(?)
+        setPersistenceRequired();  // 離れてもデスポーンしないように
     }
 
     protected ItemStack getToukenItemStack() {
@@ -73,19 +73,9 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     }
 
     @Override
-    public boolean removeWhenFarAway(double d) {
-        return false;
-    }
-
-    @Override
     public boolean isFood(ItemStack itemStack) {
         return false;
     }
-
-    // @Override
-    // public double getMyRidingOffset() {
-    //     return -0.14;
-    // }
 
     @Nullable
     @Override
@@ -95,37 +85,25 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.withDefaultNamespace("entity.generic.hurt"));
-    }
-
-    @Nullable
-    @Override
     protected SoundEvent getDeathSound() {
-        return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.withDefaultNamespace("entity.item.break"));
+        return SoundEvents.ITEM_BREAK.value();
     }
 
     @Override
     protected void registerGoals() {
-        // オオカミの挙動を参考
+        // NOTE オオカミの挙動を参考
 
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.2, false));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1, 10, 2));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8));
-        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false));
+        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1, 10, 2));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));  // 審神者が攻撃した相手を攻撃
-        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));  // 審神者を攻撃した相手を攻撃
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());  // 自身を攻撃した相手を攻撃
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractSkeleton.class, false));
-    }
-
-    /** 近接攻撃が可能か？ */
-    @Override
-    public boolean isWithinMeleeAttackRange(LivingEntity entity) {
-        return super.isWithinMeleeAttackRange(entity);
+        this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractSkeleton.class, false));
     }
 
     @Override
@@ -149,22 +127,17 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     }
 
     @Override
-    public boolean shouldTryTeleportToOwner() {
-        return super.shouldTryTeleportToOwner();
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
         updateSwingTime();  // 攻撃モーションの再生に必要
     }
 
     @Override
-    protected void dropEquipment() {
-        super.dropEquipment();
+    protected void dropEquipment(ServerLevel serverLevel) {
+        super.dropEquipment(serverLevel);
         for (var itemStack : inventory.items) {
             if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
-                spawnAtLocation(itemStack);
+                spawnAtLocation(serverLevel, itemStack);
             }
         }
     }
@@ -172,10 +145,10 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     @Override
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         var itemStackInHand = player.getItemInHand(hand);
-        var result = InteractionResult.sidedSuccess(level().isClientSide);
+        var itemInHand = itemStackInHand.getItem();
 
-        if (itemStackInHand.getItem() == Items.NAME_TAG) {
-            // TODO 他プレイヤーの刀剣男士に名札は使用できなくする
+        if (itemInHand == Items.NAME_TAG) {
+            // TODO 他プレイヤーの刀剣男士に名札を使用できなくする
 
             var touken = getToukenItemStack();
             if (hasCustomName()) {
@@ -186,18 +159,18 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         }
 
         if (getOwner() != player) {
-            return result;  // 自分の刀剣ではない
+            return InteractionResult.SUCCESS;
         }
 
-        if (itemStackInHand.getItem() == ToukenCraftItems.UCHIKO) {
+        if (itemInHand == ToukenCraftItems.UCHIKO) {
             useUchiko(player, hand);
         } else if (player.isShiftKeyDown()) {
             openCustomInventoryScreen(player);
-        } else if (itemStackInHand.getItem() == Items.AIR) {
+        } else if (itemInHand == Items.AIR) {
             unsummon(player, hand);
         }
 
-        return result;
+        return InteractionResult.SUCCESS;
     }
 
     /** 打粉で回復 */
@@ -222,15 +195,11 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         }
 
         setHealth(getHealth() + 1);
-        uchikoItemStack.hurtAndBreak(
-                1,
-                player,
-                hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND
-        );
+        uchikoItemStack.hurtAndBreak(1, player, hand);
 
         if (level.isClientSide) {
             if (getHealth() < getMaxHealth()) {
-                // TODO パーティクルの継続時間を短くする (連続使用した時分かりにくい)
+                // TODO パーティクルの継続時間を短くする (連続で使用すると分かりにくいため)
                 ParticleUtil.addParticle(
                         level,
                         ParticleTypes.HAPPY_VILLAGER, 1,
@@ -254,20 +223,20 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     /** インベントリを開く */
     protected void openCustomInventoryScreen(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            // TODO インベントリを開いている間に行ってしまわないようにする
-            serverPlayer.openMenu(new ExtendedScreenHandlerFactory() {
+            // TODO インベントリを開いている間に刀剣男士が行ってしまわないようにする
+            serverPlayer.openMenu(new ExtendedScreenHandlerFactory<>() {
                 @Override
-                public ToukenGuiData getScreenOpeningData(ServerPlayer player) {
+                public ToukenGuiData getScreenOpeningData(ServerPlayer serverPlayer) {
                     return new ToukenGuiData(ToukenEntity.this.getId());
                 }
 
                 @Override
-                public Component getDisplayName() {
+                public @NotNull Component getDisplayName() {
                     return ToukenEntity.this.getDisplayName();
                 }
 
                 @Override
-                public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
+                public @NotNull AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
                     return new ToukenGuiMenu(containerId, inventory, ToukenEntity.this);
                 }
             });
@@ -282,37 +251,26 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
 
         var toukenItemStack = getToukenItemStack();
 
-        /*
-        // インベントリのアイテムを刀剣のNBTに保存
-        toukenItemStack.setTag(serializeNBT());
-
-        // 名札などで名前が付けられていれば反映する
-        if (hasCustomName()) {
-            toukenItemStack.setHoverName(getCustomName());
-        }
-        */
-
         // 刀剣男士のHPを刀剣の耐久値に反映
         float entityMaxHp = getMaxHealth();
         float entityHp = getHealth();
         int itemMaxHp = toukenItemStack.getMaxDamage();
         int itemHp = Math.max(Math.round(itemMaxHp * entityHp / entityMaxHp), 1);
         toukenItemStack.setDamageValue(itemMaxHp - itemHp);
-        ToukenCraft.LOGGER.info(String.format("unsummon: (%.1f / %.1f) -> (%d / %d)", entityHp, entityMaxHp, itemHp, itemMaxHp));
 
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        this.writeInventoryToTag(compound, this.registryAccess());
+    protected void addAdditionalSaveData(ValueOutput value) {
+        super.addAdditionalSaveData(value);
+        this.writeInventoryToTag(value);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.readInventoryFromTag(compound, this.registryAccess());
+    protected void readAdditionalSaveData(ValueInput value) {
+        super.readAdditionalSaveData(value);
+        this.readInventoryFromTag(value);
     }
 }

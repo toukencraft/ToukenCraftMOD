@@ -4,21 +4,21 @@ import com.github.toukencraft.toukencraft.init.ToukenCraftEntities;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
 import net.fabricmc.api.ModInitializer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /** 刀剣クラフトを登録するクラス */
 public class ToukenCraft implements ModInitializer {
-    public static final String MOD_ID = "toukencraft";
-    public static final Logger LOGGER = LogManager.getLogger();
+	public static final String MOD_ID = "toukencraft";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    @Override
-    public void onInitialize() {
-        LOGGER.info("Initializing ToukenCraftMod");
+	@Override
+	public void onInitialize() {
+		LOGGER.info("Initializing ToukenCraftMod");
 
-        ToukenCraftEntities.load();
-        ToukenCraftItems.load();
-        ToukenCraftMenus.load();
-    }
+		ToukenCraftEntities.load();
+		ToukenCraftItems.load();
+		ToukenCraftMenus.load();
+	}
 }

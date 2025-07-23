@@ -2,17 +2,11 @@ package com.github.toukencraft.toukencraft.data;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.ToolMaterial;
 
 
 /**
@@ -42,71 +36,14 @@ public record ToukenProperty(
                 ;
     }
 
-    /** Itemのパラメータ */
-    public Tier toTier() {
-        return new Tier() {
-            /** 耐久 */
-            @Override
-            public int getUses() {
-                return Tiers.DIAMOND.getUses();
-            }
-
-            /** 攻撃倍率 */
-            @Override
-            public float getAttackDamageBonus() {
-                return Tiers.DIAMOND.getAttackDamageBonus();
-            }
-
-            /** 採掘効率 */
-            @Override
-            public float getSpeed() {
-                return Tiers.IRON.getSpeed();
-            }
-
-            // NOTE 1.20.5でgetLevelから置き換えられた
-            /** 採掘不能ブロック */
-            @Override
-            public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
-                return BlockTags.INCORRECT_FOR_IRON_TOOL;
-            }
-
-            /** エンチャント適正 */
-            @Override
-            public int getEnchantmentValue() {
-                return Tiers.IRON.getEnchantmentValue();
-            }
-
-            /** 修復素材 */
-            @Override
-            public @NotNull Ingredient getRepairIngredient() {
-                return Ingredient.of(new ItemStack(Items.IRON_INGOT));
-            }
-        };
-    }
-
-    /** */
-    public Item.Properties toProperties() {
-        var tier = toTier();
-        var attr = ItemAttributeModifiers.builder()
-                .add(
-                        Attributes.ATTACK_DAMAGE,
-                        new AttributeModifier(
-                                Item.BASE_ATTACK_DAMAGE_ID,
-                                3.0 + tier.getAttackDamageBonus(),
-                                AttributeModifier.Operation.ADD_VALUE
-                        ),
-                        EquipmentSlotGroup.MAINHAND
-                )
-                .add(
-                        Attributes.ATTACK_SPEED,
-                        new AttributeModifier(
-                                Item.BASE_ATTACK_SPEED_ID,
-                                -2.4,
-                                AttributeModifier.Operation.ADD_VALUE
-                        ),
-                        EquipmentSlotGroup.MAINHAND
-                )
-                .build();
-        return new Item.Properties().attributes(attr);
+    public ToolMaterial toToolMaterial() {
+        return new ToolMaterial(
+                BlockTags.INCORRECT_FOR_IRON_TOOL,  // 採掘不能ブロック
+                ToolMaterial.DIAMOND.durability(),  // 耐久
+                ToolMaterial.IRON.speed(),  // 採掘速度
+                ToolMaterial.IRON.attackDamageBonus(),  // 攻撃倍率
+                ToolMaterial.IRON.enchantmentValue(),  // エンチャント適正
+                ItemTags.IRON_TOOL_MATERIALS  // 修復用アイテム
+        );
     }
 }

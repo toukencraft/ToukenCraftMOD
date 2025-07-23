@@ -7,15 +7,9 @@
     "/+ "
   ],
   "key": {
-    "/": {
-      "item": "minecraft:stick"
-    },
-    "@": {
-      "item": "minecraft:flint"
-    },
-    "+": {
-      "item": "minecraft:paper"
-    }
+    "/": "minecraft:stick",
+    "@": "minecraft:flint",
+    "+": "minecraft:paper"
   },
   "result": {
     "id": "toukencraft:uchiko",

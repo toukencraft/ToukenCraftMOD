@@ -1,35 +1,40 @@
 {
-  "schemaVersion": 1,
-  "id": "toukencraft",
-  "version": "${version}",
+	"schemaVersion": 1,
+	"id": "toukencraft",
+	"version": "${version}",
 
-  "name": "ToukenCraft",
-  "description": "A mod that summons Touken Danshi into the world of Minecraft",
-  "authors": ["ToukenCraft"],
-  "contact": {
-    "email": "touken.craft@gmail.com"
-  },
+	"name": "ToukenCraft",
+	"description": "A mod that summons Touken Danshi into the world of Minecraft",
+	"authors": ["ToukenCraft"],
+	"contact": {
+		"email": "touken.craft@gmail.com",
+		"sources": "https://github.com/toukencraft/ToukenCraftMOD",
+		"issues": "https://github.com/toukencraft/ToukenCraftMOD/issues"
+	},
 
-  "license": "MIT",
-  "icon": "assets/toukencraft/icon.png",
+	"license": "MIT",
+	"icon": "assets/toukencraft/icon.png",
 
-  "environment": "*",
-  "entrypoints": {
-    "client": [
-      "com.github.toukencraft.toukencraft.client.ToukenCraftClient"
-    ],
-    "main": [
-      "com.github.toukencraft.toukencraft.ToukenCraft"
-    ]
-  },
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"com.github.toukencraft.toukencraft.client.ToukenCraftClient"
+		],
+		"main": [
+			"com.github.toukencraft.toukencraft.ToukenCraft"
+		]
+	},
+	"mixins": [
+		"toukencraft.mixins.json"
+	],
 
-  "mixins": [
-    "toukencraft.mixins.json"
-  ],
-    
-  "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "minecraft": "${minecraft_version}"
-  }
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"fabric-api": "*",
+		"minecraft": "~1.21.8",
+		"java": ">=21"
+	},
+	"suggests": {
+
+	}
 }
