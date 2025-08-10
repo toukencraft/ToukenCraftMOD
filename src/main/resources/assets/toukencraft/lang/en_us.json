@@ -14,5 +14,9 @@
   "entity.toukencraft.yamanbagiri_kunihiro": "Yamanbagiri Kunihiro",
 
   "item.toukencraft.hachisuka_kotetsu": "Hachisuka Kotetsu",
-  "entity.toukencraft.hachisuka_kotetsu": "Hachisuka Kotetsu"
+  "entity.toukencraft.hachisuka_kotetsu": "Hachisuka Kotetsu",
+
+  "item.toukencraft.tousou_bronze": "Tousou (Bronze)",
+  "item.toukencraft.tousou_silver": "Tousou (Silver)",
+  "item.toukencraft.tousou_gold": "Tousou (Gold)"
 }

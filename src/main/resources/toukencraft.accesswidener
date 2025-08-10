@@ -1,0 +1,3 @@
+accessWidener        v2        named
+# see https://wiki.fabricmc.net/tutorial:accesswideners
+accessible	class	net/minecraft/world/inventory/ArmorSlot

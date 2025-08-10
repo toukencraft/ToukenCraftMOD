@@ -15,10 +15,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -60,8 +58,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         inventory = new SimpleContainer(15);
         inventory.addListener(container -> {
             // インベントリの変化を即座に刀剣のNBTに反映 (インベントリのGUIで齟齬が生じないようにするため)
-            var toukenItemStack = getToukenItemStack();
-            toukenItemStack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(inventory.items));
+            saveInventory();
         });
 
         setNoAi(false);
@@ -278,8 +275,20 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         // 刀剣男士のHPを刀剣の耐久値に反映
         syncHealthToDurability();
 
+        saveInventory();
+
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
+    }
+
+    private void saveInventory() {
+        var buffer = new SimpleContainer(inventory.getContainerSize() + 1);
+        for (var i = 0; i < inventory.getContainerSize(); i++) {
+            buffer.setItem(i, inventory.getItem(i));
+        }
+        buffer.setItem(inventory.getContainerSize(), this.getItemBySlot(EquipmentSlot.CHEST));  // 刀装
+
+        this.getToukenItemStack().set(DataComponents.CONTAINER, ItemContainerContents.fromItems(buffer.items));
     }
 
     @Override
@@ -292,5 +301,10 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     protected void readAdditionalSaveData(ValueInput value) {
         super.readAdditionalSaveData(value);
         this.readInventoryFromTag(value);
+    }
+
+    @Override
+    public void hurtArmor(DamageSource damageSource, float damageAmount) {
+        this.doHurtEquipment(damageSource, damageAmount, EquipmentSlot.CHEST);
     }
 }
