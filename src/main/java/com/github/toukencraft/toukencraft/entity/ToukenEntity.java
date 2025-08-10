@@ -73,6 +73,17 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     }
 
     @Override
+    public void setHealth(float health) {
+        super.setHealth(health);
+        try {
+            syncHealthToDurability();
+        } catch (NullPointerException e) {
+            // NOTE 顕現直後の初期化時に呼ばれると、スロットがまだ初期化されていないためエラーが発生する
+            // FIXME 初期化の時だけエラーを無視したいが、それ以外のときはログに残すなりしたい
+        }
+    }
+
+    @Override
     public boolean isFood(ItemStack itemStack) {
         return false;
     }
@@ -243,6 +254,19 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         }
     }
 
+    /** 刀剣男士のHPを刀剣の耐久値に反映 */
+    private void syncHealthToDurability() {
+        var toukenItemStack = getToukenItemStack();
+
+        float entityMaxHp = getMaxHealth();
+        float entityHp = getHealth();
+
+        int itemMaxHp = toukenItemStack.getMaxDamage();
+        int itemHp = Math.max(Math.round(itemMaxHp * entityHp / entityMaxHp), 1);
+
+        toukenItemStack.setDamageValue(itemMaxHp - itemHp);
+    }
+
     /** 顕現を解除する */
     protected void unsummon(Player player, InteractionHand hand) {
         if (player.getItemInHand(hand).getItem() != Items.AIR) {
@@ -252,11 +276,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         var toukenItemStack = getToukenItemStack();
 
         // 刀剣男士のHPを刀剣の耐久値に反映
-        float entityMaxHp = getMaxHealth();
-        float entityHp = getHealth();
-        int itemMaxHp = toukenItemStack.getMaxDamage();
-        int itemHp = Math.max(Math.round(itemMaxHp * entityHp / entityMaxHp), 1);
-        toukenItemStack.setDamageValue(itemMaxHp - itemHp);
+        syncHealthToDurability();
 
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
