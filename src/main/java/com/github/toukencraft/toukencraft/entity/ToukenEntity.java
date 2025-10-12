@@ -190,7 +190,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         var level = level();
         var p = position();
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             // 打粉のパーティクル
             ParticleUtil.addParticle(
                     level,
@@ -208,7 +208,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         setHealth(getHealth() + 1);
         uchikoItemStack.hurtAndBreak(1, player, hand);
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             if (getHealth() < getMaxHealth()) {
                 // TODO パーティクルの継続時間を短くする (連続で使用すると分かりにくいため)
                 ParticleUtil.addParticle(

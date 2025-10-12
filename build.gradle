@@ -27,8 +27,9 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered() {
-		officialMojangMappings()
-		 parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+        officialMojangMappings()
+        // parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+        parchment("org.parchmentmc.data:parchment-1.21.9:${parchment_version}@zip")  // hotfix前のバージョンを使用
 	}
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
