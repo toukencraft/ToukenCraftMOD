@@ -27,6 +27,7 @@
 	"mixins": [
 		"toukencraft.mixins.json"
 	],
+	"accessWidener": "toukencraft.accesswidener",
 
 	"depends": {
 		"fabricloader": ">=0.16.14",

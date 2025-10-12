@@ -1,9 +1,14 @@
 package com.github.toukencraft.toukencraft.menu;
 
+import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
+import com.github.toukencraft.toukencraft.item.equipment.TousouItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.ArmorSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -14,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 /** 刀剣男士を右クリックしたときに開く画面の挙動 */
 public class ToukenGuiMenu extends AbstractContainerMenu {
+    private static final ResourceLocation TOUSOU_SLOT_SPRITE = ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "container/slot/tousou");
+
     private final Container toukenContainer;
 
     public final ToukenEntity toukenEntity;
@@ -56,7 +63,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
         /* プレイヤーのホットバーを開始するy座標 */
         final int yOffset3 = 142;
 
-        /* 刀剣男士のインベントリの行数*/
+        /* 刀剣男士のインベントリの行数 */
         final int nRowToukenInventory = 3;
         /* 刀剣男士のインベントリの列数 */
         final int nColToukenInventory = 5;
@@ -90,17 +97,47 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
         }
 
         //　刀剣スロット (操作不能)
-        this.addSlot(new Slot(new SimpleContainer(toukenEntity.getMainHandItem()), 0, xOffset1, yOffset1) {
-            @Override
-            public boolean mayPlace(ItemStack itemStack) {
-                return false;
-            }
+        {
+            var container = toukenEntity.createEquipmentSlotContainer(EquipmentSlot.MAINHAND);
+            this.addSlot(new ArmorSlot(
+                    container,
+                    toukenEntity,
+                    EquipmentSlot.MAINHAND,
+                    0,
+                    xOffset1,
+                    yOffset1,
+                    null
+            ) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return false;
+                }
 
-            @Override
-            public boolean mayPickup(Player player) {
-                return false;
-            }
-        });
+                @Override
+                public boolean mayPickup(Player player) {
+                    return false;
+                }
+            });
+        }
+
+        // 装備スロット
+        {
+            var container = toukenEntity.createEquipmentSlotContainer(EquipmentSlot.CHEST);
+            this.addSlot(new ArmorSlot(
+                    container,
+                    toukenEntity,
+                    EquipmentSlot.CHEST,
+                    0,
+                    xOffset1,
+                    yOffset1 + slotSize,
+                    TOUSOU_SLOT_SPRITE
+            ) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return stack.getItem() instanceof TousouItem;  // TODO タグで判定するように変更
+                }
+            });
+        }
     }
 
     @Override
@@ -123,27 +160,34 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
         final int tInventoryStartIdx = 0;
         final int pInventoryStartIdx = 15; // this.toukenContainer.getContainerSize();
         final int pHotBarStartIndex = 42; // pInventoryStartIdx + 3 * 9;
-        final int outOfRangeIndex = 51; // this.slots.size();
+        final int tEquipmentStartIndex = 51; // this.slots.size();
+        final int outOfRangeIndex = 53;
 
         var success = true;
 
-        if (index < pInventoryStartIdx) {
-            // 刀剣男士のインベントリ → プレイヤーのインベントリ(ホットバー含む)
+        if (index < pInventoryStartIdx || tEquipmentStartIndex <= index) {
+            // 刀剣男士のインベントリ(装備含む) → プレイヤーのインベントリ(ホットバー含む)
             success = moveItemStackTo(srcStack, pInventoryStartIdx, pHotBarStartIndex, true);
-        } else {
+        } else label: {
+            // プレイヤーのインベントリ(ホットバー含む) → 刀剣男士の装備欄
+            success = moveItemStackTo(srcStack, tEquipmentStartIndex, outOfRangeIndex, false);
+            if (success) {
+                break label;
+            }
+
             // プレイヤーのインベントリ(ホットバー含む) → 刀剣男士のインベントリ
             success = moveItemStackTo(srcStack, tInventoryStartIdx, pInventoryStartIdx, false);
+            if (success) {
+                break label;
+            }
 
-            if (!success) {
-                // プレイヤーのインベントリ内で移動を試みる
-
-                if (index < pHotBarStartIndex) {
-                    // インベントリ → ホットバー
-                    success = moveItemStackTo(srcStack, pHotBarStartIndex, outOfRangeIndex, false);
-                } else {
-                    // ホットバー → インベントリ
-                    success = moveItemStackTo(srcStack, pInventoryStartIdx, pHotBarStartIndex, false);
-                }
+            // プレイヤーのインベントリ内で移動を試みる
+            if (index < pHotBarStartIndex) {
+                // インベントリ → ホットバー
+                success = moveItemStackTo(srcStack, pHotBarStartIndex, tEquipmentStartIndex, false);
+            } else {
+                // ホットバー → インベントリ
+                success = moveItemStackTo(srcStack, pInventoryStartIdx, pHotBarStartIndex, false);
             }
         }
 
