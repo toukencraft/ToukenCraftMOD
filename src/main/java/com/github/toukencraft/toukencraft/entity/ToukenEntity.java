@@ -18,10 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -163,6 +160,12 @@ public class ToukenEntity extends TamableAnimal {
     protected void dropEquipment() {
         super.dropEquipment();
         for (var itemStack : inventory.items) {
+            if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
+                spawnAtLocation(itemStack);
+            }
+        }
+        {
+            var itemStack = getItemBySlot(EquipmentSlot.CHEST);
             if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
                 spawnAtLocation(itemStack);
             }
@@ -318,6 +321,15 @@ public class ToukenEntity extends TamableAnimal {
                 nbtTagList.add(itemTag);
             }
         }
+        {
+            var tousou = this.getItemBySlot(EquipmentSlot.CHEST);
+            if (!tousou.isEmpty()) {
+                var itemTag = new CompoundTag();
+                itemTag.putInt("Slot", this.inventory.getContainerSize());
+                tousou.save(itemTag);
+                nbtTagList.add(itemTag);
+            }
+        }
 
         var nbt = getToukenItemStack().getTag();
         if (nbt == null) {
@@ -339,6 +351,8 @@ public class ToukenEntity extends TamableAnimal {
             var slotIndex = itemTag.getInt("Slot");
             if (0 <= slotIndex && slotIndex < inventory.items.size()) {
                 inventory.items.set(slotIndex, ItemStack.of(itemTag));
+            } else if (slotIndex == inventory.items.size()) {
+                this.setItemSlot(EquipmentSlot.CHEST, ItemStack.of(itemTag));
             }
         }
     }
