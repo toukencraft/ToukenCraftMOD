@@ -49,7 +49,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     public final SimpleContainer inventory;
 
     @Override
-    public SimpleContainer getInventory() {
+    public @NotNull SimpleContainer getInventory() {
         return inventory;
     }
 
@@ -60,8 +60,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         inventory = new SimpleContainer(15);
         inventory.addListener(container -> {
             // インベントリの変化を即座に刀剣のNBTに反映 (インベントリのGUIで齟齬が生じないようにするため)
-            var toukenItemStack =  getToukenItemStack();
-            toukenItemStack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(inventory.items));
+            saveInventory();
         });
 
         setNoAi(false);
@@ -81,11 +80,6 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
             // NOTE 顕現直後の初期化時に呼ばれると、スロットがまだ初期化されていないためエラーが発生する
             // FIXME 初期化の時だけエラーを無視したいが、それ以外のときはログに残すなりしたい
         }
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double d) {
-        return false;
     }
 
     @Override
@@ -178,6 +172,12 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
                 spawnAtLocation(itemStack);
             }
         }
+        {
+            var itemStack = getItemBySlot(EquipmentSlot.CHEST);
+            if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+                spawnAtLocation(itemStack);
+            }
+        }
     }
 
     @Override
@@ -266,14 +266,14 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     protected void openCustomInventoryScreen(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             // TODO インベントリを開いている間に行ってしまわないようにする
-            serverPlayer.openMenu(new ExtendedScreenHandlerFactory() {
+            serverPlayer.openMenu(new ExtendedScreenHandlerFactory<>() {
                 @Override
                 public ToukenGuiData getScreenOpeningData(ServerPlayer player) {
                     return new ToukenGuiData(ToukenEntity.this.getId());
                 }
 
                 @Override
-                public Component getDisplayName() {
+                public @NotNull Component getDisplayName() {
                     return ToukenEntity.this.getDisplayName();
                 }
 
@@ -306,21 +306,23 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
 
         var toukenItemStack = getToukenItemStack();
 
-        /*
-        // インベントリのアイテムを刀剣のNBTに保存
-        toukenItemStack.setTag(serializeNBT());
-
-        // 名札などで名前が付けられていれば反映する
-        if (hasCustomName()) {
-            toukenItemStack.setHoverName(getCustomName());
-        }
-        */
-
         // 刀剣男士のHPを刀剣の耐久値に反映
         syncHealthToDurability();
 
+        saveInventory();
+
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
+    }
+
+    private void saveInventory() {
+        var buffer = new SimpleContainer(inventory.getContainerSize() + 1);
+        for (var i = 0; i < inventory.getContainerSize(); i++) {
+            buffer.setItem(i, inventory.getItem(i));
+        }
+        buffer.setItem(inventory.getContainerSize(), this.getItemBySlot(EquipmentSlot.CHEST));  // 刀装
+
+        this.getToukenItemStack().set(DataComponents.CONTAINER, ItemContainerContents.fromItems(buffer.items));
     }
 
     @Override
@@ -333,5 +335,10 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.readInventoryFromTag(compound, this.registryAccess());
+    }
+
+    @Override
+    public void hurtArmor(DamageSource damageSource, float damageAmount) {
+        this.doHurtEquipment(damageSource, damageAmount, EquipmentSlot.CHEST);
     }
 }

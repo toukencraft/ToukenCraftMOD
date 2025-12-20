@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "12",
+    "34"
+  ],
+  "key": {
+    "1": "minecraft:charcoal",
+    "2": "minecraft:gold_ingot",
+    "3": "minecraft:water_bucket",
+    "4": "minecraft:flint"
+  },
+  "result": {
+    "id": "toukencraft:tousou_gold",
+    "count": 1
+  }
+}

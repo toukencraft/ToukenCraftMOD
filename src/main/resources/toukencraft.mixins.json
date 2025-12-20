@@ -4,6 +4,7 @@
   "package": "com.github.toukencraft.toukencraft.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "LivingEntityMixin"
   ],
   "client": [
   ],

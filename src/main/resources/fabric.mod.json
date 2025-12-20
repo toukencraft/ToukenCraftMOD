@@ -26,7 +26,8 @@
   "mixins": [
     "toukencraft.mixins.json"
   ],
-    
+  "accessWidener": "toukencraft.accesswidener",
+
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

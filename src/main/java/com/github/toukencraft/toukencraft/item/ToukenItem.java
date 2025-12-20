@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -130,6 +131,10 @@ public class ToukenItem extends SwordItem {
             // インベントリのアイテムを復元
             var contents = toukenItemStack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
             contents.copyInto(entity.inventory.items);
+            var items = contents.stream().toList();
+            if (items.size() >= entity.inventory.getContainerSize()) {
+                entity.setItemSlot(EquipmentSlot.CHEST, items.get(entity.inventory.getContainerSize()));
+            }
 
             // 刀剣を渡す
             player.setItemInHand(hand, ItemStack.EMPTY);
