@@ -96,7 +96,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, slotId, xOffset1 + slotSize * col, yOffset3));
         }
 
-        //　刀剣スロット (操作不能)
+        //　刀剣スロット (操作不能) (インデックス : 51)
         {
             var container = toukenEntity.createEquipmentSlotContainer(EquipmentSlot.MAINHAND);
             this.addSlot(new ArmorSlot(
@@ -120,7 +120,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
             });
         }
 
-        // 装備スロット
+        // 装備スロット (インデックス : 52)
         {
             var container = toukenEntity.createEquipmentSlotContainer(EquipmentSlot.CHEST);
             this.addSlot(new ArmorSlot(
@@ -158,16 +158,18 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
         var clonedStack = srcStack.copy();
 
         final int tInventoryStartIdx = 0;
-        final int pInventoryStartIdx = 15; // this.toukenContainer.getContainerSize();
-        final int pHotBarStartIndex = 42; // pInventoryStartIdx + 3 * 9;
-        final int tEquipmentStartIndex = 51; // this.slots.size();
+        final int pInventoryStartIdx = 15;
+        final int pHotBarStartIndex = 42;
+        final int tEquipmentStartIndex = 51;
         final int outOfRangeIndex = 53;
 
         var success = true;
 
         if (index < pInventoryStartIdx || tEquipmentStartIndex <= index) {
             // 刀剣男士のインベントリ(装備含む) → プレイヤーのインベントリ(ホットバー含む)
-            success = moveItemStackTo(srcStack, pInventoryStartIdx, pHotBarStartIndex, true);
+            success = moveItemStackTo(srcStack, pInventoryStartIdx, tEquipmentStartIndex, true);
+
+            // プレイヤーのインベントリが満杯のときは、刀剣男士のインベントリに動かす？
         } else label: {
             // プレイヤーのインベントリ(ホットバー含む) → 刀剣男士の装備欄
             success = moveItemStackTo(srcStack, tEquipmentStartIndex, outOfRangeIndex, false);
