@@ -148,6 +148,12 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
                 spawnAtLocation(serverLevel, itemStack);
             }
         }
+        {
+            var itemStack = getItemBySlot(EquipmentSlot.CHEST);
+            if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+                spawnAtLocation(serverLevel, itemStack);
+            }
+        }
     }
 
     @Override
