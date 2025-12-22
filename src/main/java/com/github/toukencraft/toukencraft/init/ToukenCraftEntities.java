@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -26,7 +27,9 @@ public class ToukenCraftEntities {
         var entity = Registry.register(
                 BuiltInRegistries.ENTITY_TYPE,
                 ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, property.entityIdentifier()),
-                EntityType.Builder.of(ToukenEntity::new, MobCategory.CREATURE).build()
+                EntityType.Builder.of(ToukenEntity::new, MobCategory.CREATURE)
+                        .attach(EntityAttachment.VEHICLE, 0, 0.45f, 0)  // yを大きくすると乗り物に乗った時の位置が下へ
+                        .build()
         );
         TOUKEN_DANSHI.put(toukenEnum, entity);
         FabricDefaultAttributeRegistry.register(entity, property.toAttribute());
