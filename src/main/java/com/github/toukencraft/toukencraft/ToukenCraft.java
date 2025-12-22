@@ -1,5 +1,6 @@
 package com.github.toukencraft.toukencraft;
 
+import com.github.toukencraft.toukencraft.init.ToukenCraftDataComponents;
 import com.github.toukencraft.toukencraft.init.ToukenCraftEntities;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
@@ -17,6 +18,7 @@ public class ToukenCraft implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing ToukenCraftMod");
 
+        ToukenCraftDataComponents.load();
         ToukenCraftEntities.load();
         ToukenCraftItems.load();
         ToukenCraftMenus.load();

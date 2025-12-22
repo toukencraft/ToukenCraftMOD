@@ -1,6 +1,7 @@
 package com.github.toukencraft.toukencraft.item;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
+import com.github.toukencraft.toukencraft.init.ToukenCraftDataComponents;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.util.ParticleUtil;
 import net.minecraft.ChatFormatting;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -134,6 +136,11 @@ public class ToukenItem extends SwordItem {
             var items = contents.stream().toList();
             if (items.size() >= entity.inventory.getContainerSize()) {
                 entity.setItemSlot(EquipmentSlot.CHEST, items.get(entity.inventory.getContainerSize()));
+            }
+
+            // タグを復元
+            for (var tag : toukenItemStack.getOrDefault(ToukenCraftDataComponents.TOUKEN_TAG, new ArrayList<String>())) {
+                entity.addTag(tag);
             }
 
             // 刀剣を渡す
