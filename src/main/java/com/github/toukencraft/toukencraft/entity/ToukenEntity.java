@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -294,7 +295,7 @@ public class ToukenEntity extends TamableAnimal {
 
         var toukenItemStack = getToukenItemStack();
 
-        // インベントリのアイテムを刀剣のNBTに保存
+        // インベントリのアイテムとエンティティのタグを刀剣のNBTに保存
         toukenItemStack.setTag(serializeNBT());
 
         // 名札などで名前が付けられていれば反映する
@@ -310,15 +311,14 @@ public class ToukenEntity extends TamableAnimal {
     }
 
     private CompoundTag serializeNBT() {
-        var nbtTagList = new ListTag();
-
+        var itemList = new ListTag();
         for (var i = 0; i < this.inventory.getContainerSize(); i++) {
             var itemStack = this.inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 var itemTag = new CompoundTag();
                 itemTag.putInt("Slot", i);
                 itemStack.save(itemTag);
-                nbtTagList.add(itemTag);
+                itemList.add(itemTag);
             }
         }
         {
@@ -327,33 +327,45 @@ public class ToukenEntity extends TamableAnimal {
                 var itemTag = new CompoundTag();
                 itemTag.putInt("Slot", this.inventory.getContainerSize());
                 tousou.save(itemTag);
-                nbtTagList.add(itemTag);
+                itemList.add(itemTag);
             }
+        }
+
+        var tagList = new ListTag();
+        for (var tag : getTags()) {
+            tagList.add(StringTag.valueOf(tag));
         }
 
         var nbt = getToukenItemStack().getTag();
         if (nbt == null) {
             nbt = new CompoundTag();
         }
-        nbt.put("Items", nbtTagList);
+        nbt.put("Items", itemList);
         nbt.putInt("Size", this.inventory.items.size());
+        nbt.put("Tags", tagList);
         return nbt;
     }
 
-    public void deserializeNBT(CompoundTag tag) {
-        if (tag == null) {
+    public void deserializeNBT(CompoundTag nbt) {
+        if (nbt == null) {
             return;
         }
 
-        var tagList = tag.getList("Items", Tag.TAG_COMPOUND);
-        for (var i = 0; i < tagList.size(); i++) {
-            var itemTag = tagList.getCompound(i);
+        var itemList = nbt.getList("Items", Tag.TAG_COMPOUND);
+        for (var i = 0; i < itemList.size(); i++) {
+            var itemTag = itemList.getCompound(i);
             var slotIndex = itemTag.getInt("Slot");
             if (0 <= slotIndex && slotIndex < inventory.items.size()) {
                 inventory.items.set(slotIndex, ItemStack.of(itemTag));
             } else if (slotIndex == inventory.items.size()) {
                 this.setItemSlot(EquipmentSlot.CHEST, ItemStack.of(itemTag));
             }
+        }
+
+        var tagList = nbt.getList("Tags", Tag.TAG_STRING);
+        for (var i = 0; i < tagList.size(); i++) {
+            var tag = tagList.getString(i);
+            addTag(tag);
         }
     }
 

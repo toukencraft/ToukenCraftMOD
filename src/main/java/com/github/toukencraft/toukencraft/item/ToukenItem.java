@@ -132,7 +132,7 @@ public class ToukenItem extends SwordItem {
                 entity.setCustomName(toukenItemStack.getHoverName());
             }
 
-            // NBTからインベントリのアイテムを復元
+            // NBTからインベントリのアイテムとエンティティのタグを復元
             var tag = toukenItemStack.getTag();
             entity.deserializeNBT(tag);
 
