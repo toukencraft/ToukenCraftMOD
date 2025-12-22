@@ -22,7 +22,10 @@
 		],
 		"main": [
 			"com.github.toukencraft.toukencraft.ToukenCraft"
-		]
+		],
+        "fabric-datagen": [
+          "com.github.toukencraft.toukencraft.ToukenCraftDataGenerator"
+        ]
 	},
 	"mixins": [
 		"toukencraft.mixins.json"

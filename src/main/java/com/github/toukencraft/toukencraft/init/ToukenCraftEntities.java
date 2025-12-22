@@ -13,11 +13,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /** 刀剣男士を登録するクラス */
 public class ToukenCraftEntities {
     /** 登録された刀剣男士の一覧 */
-    public static HashMap<ToukenEnum, EntityType<ToukenEntity>> TOUKEN_DANSHI = new HashMap<>();
+    public static HashMap<ToukenEnum, EntityType<ToukenEntity>> TOUKEN_DANSHI = new LinkedHashMap<>();
 
     private static void loadTouken(ToukenEnum toukenEnum) {
         var id = ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, toukenEnum.property.entityIdentifier());
