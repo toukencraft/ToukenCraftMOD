@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -23,7 +24,9 @@ public class ToukenCraftEntities {
     private static void loadTouken(ToukenEnum toukenEnum) {
         var id = ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, toukenEnum.property.entityIdentifier());
         var key = ResourceKey.create(Registries.ENTITY_TYPE, id);
-        var entityType = EntityType.Builder.of(ToukenEntity::new, MobCategory.CREATURE).build(key);
+        var entityType = EntityType.Builder.of(ToukenEntity::new, MobCategory.CREATURE)
+                .attach(EntityAttachment.VEHICLE, 0, 0.45f, 0)  // yを大きくすると乗り物に乗った時の位置が下へ
+                .build(key);
 
         Registry.register(BuiltInRegistries.ENTITY_TYPE, key, entityType);
         FabricDefaultAttributeRegistry.register(entityType, toukenEnum.property.toAttribute().build());
