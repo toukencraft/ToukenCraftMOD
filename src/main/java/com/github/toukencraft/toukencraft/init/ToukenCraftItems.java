@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 /** 刀剣・アイテムを登録するクラス */
@@ -26,10 +27,10 @@ public class ToukenCraftItems {
     public static Item UCHIKO;
 
     /** 刀装の一覧 */
-    public static HashMap<TousouEnum, Item> TOUSOU = new HashMap<>();
+    public static HashMap<TousouEnum, Item> TOUSOU = new LinkedHashMap<>();
 
     /** 刀剣の一覧 */
-    public static HashMap<ToukenEnum, ToukenItem> TOUKEN = new HashMap<>();
+    public static HashMap<ToukenEnum, ToukenItem> TOUKEN = new LinkedHashMap<>();
 
 
     private static void loadTouken(ToukenEnum toukenEnum) {
