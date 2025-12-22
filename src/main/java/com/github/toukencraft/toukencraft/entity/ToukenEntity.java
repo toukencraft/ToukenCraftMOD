@@ -1,5 +1,6 @@
 package com.github.toukencraft.toukencraft.entity;
 
+import com.github.toukencraft.toukencraft.init.ToukenCraftDataComponents;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiData;
 import com.github.toukencraft.toukencraft.util.ParticleUtil;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
@@ -282,6 +283,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         syncHealthToDurability();
 
         saveInventory();
+        getToukenItemStack().set(ToukenCraftDataComponents.TOUKEN_TAG, getTags().stream().toList());
 
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
