@@ -30,7 +30,14 @@ public enum ToukenEnum {
             "hachisuka_kotetsu",
             ToukenType.UCHIGATANA,
             1.76f
-    );
+    ),
+    TEST(new ToukenProperty(
+            "dummy",
+            "dummy",
+            new ResourceLocation("minecraft", "textures/entity/player/wide/steve.png"),
+            ToukenType.UCHIGATANA,
+            2f
+    ));
 
     public final ToukenProperty property;
 
