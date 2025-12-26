@@ -1,10 +1,9 @@
 package com.github.toukencraft.toukencraft.menu;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
+import com.github.toukencraft.toukencraft.datagen.ToukenCraftItemTagProvider;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
-import com.github.toukencraft.toukencraft.item.equipment.TousouItem;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -143,7 +142,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
             ) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return stack.getItem() instanceof TousouItem;  // TODO タグで判定するように変更
+                    return stack.is(ToukenCraftItemTagProvider.TOUSOU_ITEMS);
                 }
             });
         }

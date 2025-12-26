@@ -1,7 +1,7 @@
 package com.github.toukencraft.toukencraft.mixin;
 
-import com.github.toukencraft.toukencraft.entity.ToukenEntity;
-import com.github.toukencraft.toukencraft.item.equipment.TousouItem;
+import com.github.toukencraft.toukencraft.datagen.ToukenCraftEntityTypeTagProvider;
+import com.github.toukencraft.toukencraft.datagen.ToukenCraftItemTagProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -17,9 +17,9 @@ public abstract class LivingEntityMixin {
     private void tick(CallbackInfo info) {
         // 刀剣男士以外が刀装を装備していたらドロップする
         var self = (LivingEntity) (Object) this;
-        if (!(self instanceof ToukenEntity)) {
+        if (!(self.getType().is((ToukenCraftEntityTypeTagProvider.DANSHI_ENTITY_TYPES)))) {
             var itemStack = self.getItemBySlot(EquipmentSlot.CHEST);
-            if (itemStack.getItem() instanceof TousouItem) {
+            if (itemStack.is(ToukenCraftItemTagProvider.TOUSOU_ITEMS)) {
                 self.spawnAtLocation(itemStack);
                 self.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
             }
