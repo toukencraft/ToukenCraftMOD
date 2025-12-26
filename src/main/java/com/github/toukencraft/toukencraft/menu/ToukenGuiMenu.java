@@ -1,14 +1,12 @@
 package com.github.toukencraft.toukencraft.menu;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
+import com.github.toukencraft.toukencraft.datagen.ToukenCraftItemTagProvider;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
-import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
-import com.github.toukencraft.toukencraft.item.equipment.TousouItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,7 +17,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.mojang.datafixers.util.Pair;
 
 
@@ -154,7 +151,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(container, 0, xOffset1, yOffset1 + slotSize) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return stack.getItem() instanceof TousouItem;
+                    return stack.is(ToukenCraftItemTagProvider.TOUSOU_ITEMS);
                 }
 
                 @Override
