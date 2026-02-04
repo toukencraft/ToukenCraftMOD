@@ -85,7 +85,7 @@ public class ToukenItem extends Item {
             var contents = toukenItemStack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
             contents.copyInto(entity.inventory.items);
             var items = contents.stream().toList();
-            if (items.size() >= entity.inventory.getContainerSize()) {
+            if (items.size() > entity.inventory.getContainerSize()) {
                 entity.setItemSlot(EquipmentSlot.CHEST, items.get(entity.inventory.getContainerSize()));
             }
 
