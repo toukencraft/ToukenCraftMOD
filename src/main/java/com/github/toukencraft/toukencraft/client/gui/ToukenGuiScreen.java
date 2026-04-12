@@ -5,20 +5,19 @@ import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 
-/** 刀剣男士を右クリックしたときに開く画面 */
 @Environment(EnvType.CLIENT)
 public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
-    private static final ResourceLocation BACKGROUND_LOCATION =
-            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "textures/gui/container/inventory.png");
+    private static final Identifier BACKGROUND_LOCATION =
+            Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "textures/gui/container/inventory.png");
 
     private final ToukenEntity entity;
 
@@ -28,10 +27,11 @@ public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, a);
+
         var offsetX = (this.width - this.imageWidth) / 2;
         var offsetY = (this.height - this.imageHeight) / 2;
-
         guiGraphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 BACKGROUND_LOCATION,
@@ -49,7 +49,7 @@ public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
             /* 刀剣のスロット類を開始するy座標 */
             final int yOffset1 = 18;
 
-            InventoryScreen.renderEntityInInventoryFollowsMouse(
+            InventoryScreen.extractEntityInInventoryFollowsMouse(
                     guiGraphics,
                     offsetX + xOffset1 + slotSize,
                     offsetY + yOffset1,
@@ -62,11 +62,5 @@ public class ToukenGuiScreen extends AbstractContainerScreen<ToukenGuiMenu> {
                     entity
             );
         }
-    }
-
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 }

@@ -2,11 +2,11 @@ package com.github.toukencraft.toukencraft.datagen;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.init.ToukenCraftEntities;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 
@@ -14,14 +14,14 @@ import java.util.concurrent.CompletableFuture;
 
 
 /** EntityTypeにタグを追加するクラス */
-public class ToukenCraftEntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvider {
+public class ToukenCraftEntityTypeTagProvider extends FabricTagsProvider.EntityTypeTagsProvider {
     /** 刀剣男士のタグ */
     public static final TagKey<EntityType<?>> DANSHI_ENTITY_TYPES = TagKey.create(
             Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "danshi")
+            Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "danshi")
     );
 
-    public ToukenCraftEntityTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ToukenCraftEntityTypeTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

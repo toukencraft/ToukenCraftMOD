@@ -5,7 +5,7 @@ import com.github.toukencraft.toukencraft.menu.ToukenGuiData;
 import com.github.toukencraft.toukencraft.util.ParticleUtil;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
 import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -23,10 +23,10 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -57,10 +57,6 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
 
         xpReward = 0;
         inventory = new SimpleContainer(15);
-        inventory.addListener(container -> {
-            // インベントリの変化を即座に刀剣のNBTに反映 (インベントリのGUIで齟齬が生じないようにするため)
-            saveInventory();
-        });
 
         setNoAi(false);
         setPersistenceRequired();  // 離れてもデスポーンしないように
@@ -199,7 +195,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
             ParticleUtil.addParticle(
                     level,
                     ParticleTypes.FIREWORK, 1,
-                    p.x, p.y + 1.5/2, p.z,
+                    p.x, p.y + 1.5 / 2, p.z,
                     1.5, 1.5, 1.5,
                     0, 0, 0
             );
@@ -218,10 +214,10 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
                 ParticleUtil.addParticle(
                         level,
                         ParticleTypes.HAPPY_VILLAGER, 1,
-                        p.x, getEyeY(), p.z,
+                p.x, getEyeY(), p.z,
                         1.5, 1.5, 1.5,
                         0, 0, 0
-                );
+        );
             } else {
                 // HPが全快したら多めに出す
                 ParticleUtil.addParticle(
@@ -239,7 +235,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     protected void openCustomInventoryScreen(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             // TODO インベントリを開いている間に刀剣男士が行ってしまわないようにする
-            serverPlayer.openMenu(new ExtendedScreenHandlerFactory<>() {
+            serverPlayer.openMenu(new ExtendedMenuProvider<>() {
                 @Override
                 public ToukenGuiData getScreenOpeningData(ServerPlayer serverPlayer) {
                     return new ToukenGuiData(ToukenEntity.this.getId());
@@ -283,13 +279,13 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         syncHealthToDurability();
 
         saveInventory();
-        getToukenItemStack().set(ToukenCraftDataComponents.TOUKEN_TAG, getTags().stream().toList());
+        getToukenItemStack().set(ToukenCraftDataComponents.TOUKEN_TAG, entityTags().stream().toList());
 
         player.setItemInHand(hand, toukenItemStack);  // 刀剣をプレイヤーの手に移動
         remove(RemovalReason.DISCARDED);  // 刀剣男士の顕現を解除
     }
 
-    private void saveInventory() {
+    public void saveInventory() {
         var buffer = new SimpleContainer(inventory.getContainerSize() + 1);
         for (var i = 0; i < inventory.getContainerSize(); i++) {
             buffer.setItem(i, inventory.getItem(i));

@@ -1,6 +1,6 @@
 package com.github.toukencraft.toukencraft.data;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ToolMaterial;
 public record ToukenProperty(
         String itemIdentifier,
         String entityIdentifier,
-        ResourceLocation textureLocation,
+        Identifier textureLocation,
         ToukenType toukenType,
         float height
 ) {
@@ -30,7 +30,7 @@ public record ToukenProperty(
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20 * 2)  // 生存
                 .add(Attributes.ATTACK_DAMAGE, 3)  // 打撃
-                .add(Attributes.ARMOR, 4)  // 統率
+                .add(Attributes.ARMOR, 4)  //統率
                 .add(Attributes.MOVEMENT_SPEED, 0.25f)  // 機動
                 .add(Attributes.FOLLOW_RANGE, 16)
                 ;

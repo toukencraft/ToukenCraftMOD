@@ -2,11 +2,11 @@ package com.github.toukencraft.toukencraft.datagen;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.init.ToukenCraftItems;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -14,26 +14,26 @@ import java.util.concurrent.CompletableFuture;
 
 
 /** Itemにタグを追加するクラス */
-public class ToukenCraftItemTagProvider extends FabricTagProvider.ItemTagProvider {
+public class ToukenCraftItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
     /** 刀剣のタグ */
     public static final TagKey<Item> TOUKEN_ITEMS = TagKey.create(
             Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "touken")
+            Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "touken")
     );
 
     /** 打粉のタグ */
     public static final TagKey<Item> UCHIKO_ITEMS = TagKey.create(
             Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "uchiko")
+            Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "uchiko")
     );
 
     /** 刀装のタグ */
     public static final TagKey<Item> TOUSOU_ITEMS = TagKey.create(
             Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "tousou")
+            Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "tousou")
     );
 
-    public ToukenCraftItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ToukenCraftItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

@@ -2,7 +2,7 @@ package com.github.toukencraft.toukencraft.item.equipment;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 
@@ -15,7 +15,7 @@ public class TousouAssets {
     private static ResourceKey<EquipmentAsset> createKey(String path) {
         return ResourceKey.create(
                 EquipmentAssets.ROOT_ID,
-                ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, path)
+                Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, path)
         );
     }
 }

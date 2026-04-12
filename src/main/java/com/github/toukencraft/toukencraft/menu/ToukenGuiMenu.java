@@ -4,7 +4,7 @@ import com.github.toukencraft.toukencraft.ToukenCraft;
 import com.github.toukencraft.toukencraft.datagen.ToukenCraftItemTagProvider;
 import com.github.toukencraft.toukencraft.entity.ToukenEntity;
 import com.github.toukencraft.toukencraft.init.ToukenCraftMenus;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ArmorSlot;
@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** 刀剣男士を右クリックしたときに開く画面の挙動 */
 public class ToukenGuiMenu extends AbstractContainerMenu {
-    private static final ResourceLocation TOUSOU_SLOT_SPRITE = ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "container/slot/tousou");
+    private static final Identifier TOUSOU_SLOT_SPRITE = Identifier.fromNamespaceAndPath(ToukenCraft.MOD_ID, "container/slot/tousou");
 
     private final Container toukenContainer;
 
@@ -38,9 +39,25 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
 
         this.toukenEntity = toukenEntity;
         this.player = playerInventory.player;
-        this.toukenContainer = toukenEntity != null ? toukenEntity.inventory : new SimpleContainer(15);
+        this.toukenContainer = toukenEntity != null ? toukenEntity.inventory : new SimpleContainer(15);  // TODO 変数に
 
-        this.toukenContainer.startOpen(playerInventory.player);
+        addSlotListener(new ContainerListener() {
+            @Override
+            public void slotChanged(AbstractContainerMenu container, int slotIndex, ItemStack itemStack) {
+                if (toukenEntity != null) {
+                    toukenEntity.saveInventory();
+                }
+            }
+
+            @Override
+            public void dataChanged(AbstractContainerMenu container, int id, int value) {
+                if (toukenEntity != null) {
+                    toukenEntity.saveInventory();
+                }
+            }
+        });
+
+        toukenContainer.startOpen(playerInventory.player);
         addSlots(playerInventory);
     }
 
@@ -144,13 +161,13 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return toukenContainer.stillValid(player) &&
                 toukenEntity.isAlive() &&
-                player.canInteractWithEntity(toukenEntity, 4.0);
+                player.isWithinEntityInteractionRange(toukenEntity, 4.0);
     }
 
     @Override
     public @NotNull ItemStack quickMoveStack(Player player, int index) {
         var slot = slots.get(index);
-        if (!slot.hasItem()) {
+        if(!slot.hasItem()) {
             return ItemStack.EMPTY;
         }
 

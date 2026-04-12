@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -25,9 +25,9 @@ public class ToukenEntityRenderer extends HumanoidMobRenderer<ToukenEntity, Huma
     protected final float height;
 
     /** モデルのテクスチャの場所 */
-    protected final ResourceLocation textureLocation;
+    protected final Identifier textureLocation;
 
-    public ToukenEntityRenderer(EntityRendererProvider.Context context, ResourceLocation textureLocation, float height) {
+    public ToukenEntityRenderer(EntityRendererProvider.Context context, Identifier textureLocation, float height) {
         super(context, new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER)), 0.5f);
         this.textureLocation = textureLocation;
         this.height = height;
@@ -44,7 +44,7 @@ public class ToukenEntityRenderer extends HumanoidMobRenderer<ToukenEntity, Huma
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(HumanoidRenderState renderState) {
+    public @NotNull Identifier getTextureLocation(HumanoidRenderState renderState) {
         return textureLocation;
     }
 

@@ -84,7 +84,7 @@ public class ToukenItem extends Item {
             // インベントリのアイテムを復元
             var contents = toukenItemStack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
             contents.copyInto(entity.inventory.items);
-            var items = contents.stream().toList();
+            var items = contents.allItemsCopyStream().toList();
             if (items.size() > entity.inventory.getContainerSize()) {
                 entity.setItemSlot(EquipmentSlot.CHEST, items.get(entity.inventory.getContainerSize()));
             }
@@ -98,6 +98,7 @@ public class ToukenItem extends Item {
             player.setItemInHand(context.getHand(), ItemStack.EMPTY);
             entity.setLeftHanded(false);  // 確率で左利きになる(?)のを防ぐ
             entity.setItemInHand(InteractionHand.MAIN_HAND, toukenItemStack);
+
             serverLevel.addFreshEntity(entity);
 
             // 刀剣の耐久度を刀剣男士のHPに反映

@@ -1,7 +1,7 @@
 package com.github.toukencraft.toukencraft.data;
 
 import com.github.toukencraft.toukencraft.ToukenCraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 
 /** 刀剣男士の一覧 */
@@ -34,7 +34,7 @@ public enum ToukenEnum {
     TEST(new ToukenProperty(
             "dummy",
             "dummy",
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/entity/player/wide/steve.png"),
+            Identifier.fromNamespaceAndPath("minecraft", "textures/entity/player/wide/steve.png"),
             ToukenType.UCHIGATANA,
             2f
     ));
@@ -49,7 +49,7 @@ public enum ToukenEnum {
         this(new ToukenProperty(
                 identifier,
                 identifier,
-                ResourceLocation.fromNamespaceAndPath(
+                Identifier.fromNamespaceAndPath(
                         ToukenCraft.MOD_ID,
                         String.format("textures/entity/%s.png", identifier)
                 ),
