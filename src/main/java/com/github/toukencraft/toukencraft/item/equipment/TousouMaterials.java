@@ -17,7 +17,8 @@ public class TousouMaterials {
             0,
             0,
             ItemTags.COPPER_ORES,  // TODO 実装されたらREPAIRS_COPPER_ARMORに更新する
-            TousouAssets.TOUSOU_BRONZE_KEY
+            TousouAssets.TOUSOU_BRONZE_KEY,
+            0
     );
     public static final ArmorMaterial TOUSOU_SILVER_MATERIAL = new ArmorMaterial(
             48,
@@ -27,7 +28,8 @@ public class TousouMaterials {
             1,
             0,
             ItemTags.REPAIRS_IRON_ARMOR,
-            TousouAssets.TOUSOU_SILVER_KEY
+            TousouAssets.TOUSOU_SILVER_KEY,
+            0
     );
     public static final ArmorMaterial TOUSOU_GOLD_MATERIAL = new ArmorMaterial(
             66,
@@ -37,7 +39,8 @@ public class TousouMaterials {
             2,
             0,
             ItemTags.REPAIRS_GOLD_ARMOR,
-            TousouAssets.TOUSOU_GOLD_KEY
+            TousouAssets.TOUSOU_GOLD_KEY,
+            0
     );
 }
 

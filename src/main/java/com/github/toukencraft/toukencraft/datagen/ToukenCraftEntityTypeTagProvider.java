@@ -27,6 +27,6 @@ public class ToukenCraftEntityTypeTagProvider extends FabricTagProvider.EntityTy
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        valueLookupBuilder(DANSHI_ENTITY_TYPES).add(ToukenCraftEntities.TOUKEN_DANSHI.values().toArray(new EntityType[0]));
+        getOrCreateTagBuilder(DANSHI_ENTITY_TYPES).add(ToukenCraftEntities.TOUKEN_DANSHI.values().toArray(new EntityType[0]));
     }
 }

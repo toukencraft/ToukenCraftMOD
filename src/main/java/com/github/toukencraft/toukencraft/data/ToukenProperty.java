@@ -43,7 +43,8 @@ public record ToukenProperty(
                 ToolMaterial.IRON.speed(),  // 採掘速度
                 ToolMaterial.IRON.attackDamageBonus(),  // 攻撃倍率
                 ToolMaterial.IRON.enchantmentValue(),  // エンチャント適正
-                ItemTags.IRON_TOOL_MATERIALS  // 修復用アイテム
+                ItemTags.IRON_TOOL_MATERIALS,  // 修復用アイテム
+                0  // craftmineの換金額
         );
     }
 }

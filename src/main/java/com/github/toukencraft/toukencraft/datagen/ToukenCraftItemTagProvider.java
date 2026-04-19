@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -33,14 +34,30 @@ public class ToukenCraftItemTagProvider extends FabricTagProvider.ItemTagProvide
             ResourceLocation.fromNamespaceAndPath(ToukenCraft.MOD_ID, "tousou")
     );
 
+    private static final String BRINGIN_MOD_ID = "bringin";
+
+    public static final TagKey<Item> BRING_IN = TagKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(BRINGIN_MOD_ID, "bring_in")
+    );
+
+    public static final TagKey<Item> KEEP_ON_DEATH = TagKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(BRINGIN_MOD_ID, "keep_on_death")
+    );
+
     public ToukenCraftItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        valueLookupBuilder(TOUKEN_ITEMS).add(ToukenCraftItems.TOUKEN.values().toArray(new Item[0]));
-        valueLookupBuilder(UCHIKO_ITEMS).add(ToukenCraftItems.UCHIKO);
-        valueLookupBuilder(TOUSOU_ITEMS).add(ToukenCraftItems.TOUSOU.values().toArray(new Item[0]));
+        getOrCreateTagBuilder(TOUKEN_ITEMS).add(ToukenCraftItems.TOUKEN.values().toArray(new Item[0]));
+        getOrCreateTagBuilder(UCHIKO_ITEMS).add(ToukenCraftItems.UCHIKO);
+        getOrCreateTagBuilder(TOUSOU_ITEMS).add(ToukenCraftItems.TOUSOU.values().toArray(new Item[0]));
+
+        getOrCreateTagBuilder(BRING_IN).add(ToukenCraftItems.TOUKEN.values().toArray(new Item[0]));
+        getOrCreateTagBuilder(KEEP_ON_DEATH).add(ToukenCraftItems.TOUKEN.values().toArray(new Item[0]));
+        getOrCreateTagBuilder(ItemTags.CARRY_OVER).add(ToukenCraftItems.TOUKEN.values().toArray(new Item[0]));
     }
 }

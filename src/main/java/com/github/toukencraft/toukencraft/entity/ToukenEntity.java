@@ -8,6 +8,7 @@ import com.github.toukencraft.toukencraft.menu.ToukenGuiMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,8 +38,6 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -210,7 +209,7 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
         }
 
         setHealth(getHealth() + 1);
-        uchikoItemStack.hurtAndBreak(1, player, hand);
+        uchikoItemStack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
         if (level.isClientSide) {
             if (getHealth() < getMaxHealth()) {
@@ -300,15 +299,15 @@ public class ToukenEntity extends TamableAnimal implements InventoryCarrier {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput value) {
-        super.addAdditionalSaveData(value);
-        this.writeInventoryToTag(value);
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        this.writeInventoryToTag(compound, this.registryAccess());
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput value) {
-        super.readAdditionalSaveData(value);
-        this.readInventoryFromTag(value);
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.readInventoryFromTag(compound, this.registryAccess());
     }
 
     @Override

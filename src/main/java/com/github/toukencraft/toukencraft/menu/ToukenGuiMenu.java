@@ -29,7 +29,7 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
 
     // クライアントサイドで呼び出し
     public ToukenGuiMenu(int containerId, Inventory playerInventory, ToukenGuiData data) {
-        this(containerId, playerInventory, (ToukenEntity) playerInventory.player.level().getEntity(data.entityId()));
+        this(containerId, playerInventory, (ToukenEntity) playerInventory.getPlayer().level().getEntity(data.entityId()));
     }
 
     // サーバーサイドで呼び出し
@@ -37,10 +37,10 @@ public class ToukenGuiMenu extends AbstractContainerMenu {
         super(ToukenCraftMenus.TOUKEN_INVENTORY, containerId);
 
         this.toukenEntity = toukenEntity;
-        this.player = playerInventory.player;
+        this.player = playerInventory.getPlayer();
         this.toukenContainer = toukenEntity != null ? toukenEntity.inventory : new SimpleContainer(15);
 
-        this.toukenContainer.startOpen(playerInventory.player);
+        this.toukenContainer.startOpen(playerInventory.getPlayer());
         addSlots(playerInventory);
     }
 

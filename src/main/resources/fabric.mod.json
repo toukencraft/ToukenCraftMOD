@@ -28,14 +28,13 @@
         ]
 	},
 	"mixins": [
-		"toukencraft.mixins.json"
 	],
 	"accessWidener": "toukencraft.accesswidener",
 
 	"depends": {
-		"fabricloader": ">=0.16.14",
+		"fabricloader": ">=0.19.1",
 		"fabric-api": "*",
-		"minecraft": ">=1.21.6 <=1.21.8",
+		"minecraft": "1.21.6-alpha.25.14.craftmine",
 		"java": ">=21"
 	},
 	"suggests": {
